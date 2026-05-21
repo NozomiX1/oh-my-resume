@@ -1,0 +1,320 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Resume Template Mockup</title>
+    <link rel="stylesheet" href="../styles/compact-technical.css?v=20260522">
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-width: 980px;
+        color: #1f2937;
+        background: #e6ebf2;
+        font-family: Arial, "Noto Sans SC", "Microsoft YaHei", sans-serif;
+      }
+
+      .mockup-toolbar {
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        display: flex;
+        align-items: baseline;
+        gap: 10px;
+        padding: 12px 16px;
+        border-bottom: 1px solid #cbd5e1;
+        background: rgba(255, 255, 255, 0.94);
+        backdrop-filter: blur(10px);
+      }
+
+      .mockup-toolbar h1 {
+        margin: 0;
+        color: #111827;
+        font-size: 16px;
+      }
+
+      .mockup-toolbar span {
+        color: #64748b;
+        font-size: 12px;
+      }
+
+      .mockup-stage {
+        display: grid;
+        justify-items: center;
+        padding: 22px;
+      }
+
+      .paper-zoom {
+        width: 210mm;
+        height: 297mm;
+        position: relative;
+      }
+
+      .endfield-profile {
+        --endfield-section-radius: 1.1mm;
+        background: rgb(236, 236, 236);
+      }
+
+      .endfield-profile .resume-header {
+        position: relative;
+        grid-template-columns: 32mm minmax(0, 1fr);
+        column-gap: 7mm;
+        align-items: center;
+        min-height: 43mm;
+        margin-bottom: 1mm;
+        padding: 6mm 8mm 6mm 7mm;
+        overflow: hidden;
+        color: #f8fafc;
+        background:
+          radial-gradient(rgba(255, 255, 255, 0.075) 0.45px, transparent 0.7px) 0 0 / 4px 4px,
+          radial-gradient(rgba(0, 0, 0, 0.22) 0.6px, transparent 0.85px) 2px 2px / 4px 4px,
+          repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.018) 0 1px, transparent 1px 4px),
+          repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.014) 0 1px, transparent 1px 4px),
+          repeating-linear-gradient(135deg, transparent 0 3pt, rgba(255, 255, 255, 0.018) 3pt 3.5pt, transparent 3.5pt 7pt),
+          linear-gradient(90deg, rgba(255, 215, 0, 0.12), transparent 18%),
+          rgb(36, 36, 36);
+        border-radius: 4.2mm;
+        box-shadow: 0 2mm 6mm rgba(15, 23, 42, 0.18);
+      }
+
+      .endfield-profile .resume-header::before {
+        content: "";
+        position: absolute;
+        top: 9mm;
+        left: 4mm;
+        width: 2.2mm;
+        height: 2.2mm;
+        background: #ffd700;
+      }
+
+      .endfield-profile .resume-header::after {
+        content: "///";
+        position: absolute;
+        top: 4.5mm;
+        right: 7mm;
+        color: #ff6b00;
+        font-size: 11pt;
+        font-weight: 900;
+        letter-spacing: -1pt;
+        transform: skew(-16deg);
+      }
+
+      .endfield-profile .resume-profile {
+        grid-column: 2;
+        grid-row: 1;
+        position: relative;
+        z-index: 1;
+        text-align: left;
+      }
+
+      .endfield-profile .resume-profile::before {
+        content: "[ RESUME_PROFILE ]";
+        display: block;
+        margin-bottom: 3pt;
+        color: rgba(255, 255, 255, 0.36);
+        font-family: "SFMono-Regular", Consolas, monospace;
+        font-size: 5.8pt;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+      }
+
+      .endfield-profile .resume-header h1 {
+        margin-bottom: 2pt;
+        color: #ffffff;
+        font-size: calc(20pt * var(--fit-scale));
+        font-weight: 900;
+        letter-spacing: 0;
+      }
+
+      .endfield-profile .resume-title {
+        margin-bottom: 4pt;
+        color: rgba(255, 255, 255, 0.78);
+        font-size: calc(9.3pt * var(--fit-scale));
+        font-weight: 800;
+      }
+
+      .endfield-profile .resume-contacts {
+        justify-content: flex-start;
+        gap: 1.5pt 11pt;
+        color: rgba(255, 255, 255, 0.7);
+        font-size: calc(7.7pt * var(--fit-scale));
+        line-height: 1.35;
+      }
+
+      .endfield-profile .resume-contacts .contact:not(.contact-row-start)::before {
+        color: rgba(255, 215, 0, 0.68);
+      }
+
+      .endfield-profile .resume-header a {
+        color: #ffffff;
+      }
+
+      .endfield-profile .resume-header .resume-photo {
+        grid-column: 1;
+        grid-row: 1;
+        justify-self: start;
+        position: relative;
+        z-index: 1;
+        width: 28mm;
+        height: 28mm;
+        border: 1.2pt solid rgba(255, 255, 255, 0.9);
+        outline: 1pt solid rgba(255, 215, 0, 0.82);
+        outline-offset: -2.2mm;
+        box-shadow:
+          1.8mm -1.8mm 0 -0.7mm #ff6b00,
+          0 0 0 0.7pt rgba(255, 255, 255, 0.16);
+        clip-path: polygon(0 0, 100% 0, 100% calc(100% - 4mm), calc(100% - 4mm) 100%, 0 100%);
+      }
+
+      .endfield-profile main {
+        position: relative;
+      }
+
+      .endfield-profile .resume-section {
+        position: relative;
+        z-index: 1;
+        margin-bottom: 1mm;
+      }
+
+      .endfield-profile .resume-section h2 {
+        position: relative;
+        display: grid;
+        grid-template-columns: max-content minmax(0, 1fr);
+        align-items: center;
+        gap: 4pt;
+        min-height: 7.6mm;
+        margin-bottom: 1mm;
+        padding: 1.1mm 2.8mm 1.1mm 4mm;
+        overflow: visible;
+        color: #f8fafc;
+        border: 0;
+        border-radius: var(--endfield-section-radius);
+        background:
+          repeating-linear-gradient(
+            135deg,
+            transparent 0 1.15px,
+            rgba(255, 255, 255, 0.065) 1.15px 1.65px,
+            rgba(255, 255, 255, 0.02) 1.65px 2.8px,
+            transparent 2.8px 4px
+          ),
+          linear-gradient(90deg, #262a2e, #1c2025);
+        box-shadow:
+          0 0 8pt rgba(255, 215, 0, 0.68),
+          0 0 15pt rgba(255, 215, 0, 0.24),
+          inset 0 0 0 0.7pt rgba(255, 255, 255, 0.08);
+        font-size: calc(10.5pt * var(--fit-scale));
+        font-weight: 900;
+        line-height: 1;
+        white-space: nowrap;
+      }
+
+      .endfield-profile .resume-section h2 > * {
+        position: relative;
+        z-index: 1;
+      }
+
+      .endfield-profile .resume-section h2::before {
+        content: "";
+        display: block;
+        position: absolute;
+        top: 1.35mm;
+        bottom: 1.35mm;
+        left: 1.7mm;
+        width: 0.9mm;
+        background: #ffea00;
+        box-shadow: 0 0 4pt rgba(255, 215, 0, 0.65);
+      }
+
+      .endfield-profile .resume-section h2::after {
+        content: none;
+      }
+
+      .endfield-profile .section-content-card {
+        position: relative;
+        overflow: hidden;
+        padding: 2mm 2.6mm 3.2mm;
+        color: #111827;
+        background: rgb(220, 220, 220);
+        border: 0.6pt solid rgba(148, 163, 184, 0.48);
+        border-radius: var(--endfield-section-radius);
+        box-shadow: 0 1mm 2.6mm rgba(15, 23, 42, 0.1);
+      }
+
+      .endfield-profile .section-content-card::before {
+        content: "";
+        position: absolute;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        height: 5.2mm;
+        background: linear-gradient(180deg, rgba(220, 220, 220, 0) 0, #eee2ff 42%, #c58cff 100%);
+      }
+
+      .endfield-profile .section-content-card::after {
+        content: "";
+        position: absolute;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        height: 0.7mm;
+        background: #8f4dff;
+      }
+
+      .endfield-profile .section-content-card > * {
+        position: relative;
+        z-index: 1;
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="mockup-toolbar" aria-label="Mockup status">
+      <h1>Current Base Template</h1>
+      <span>真实 HTML/CSS，复用当前 parser/render 输出</span>
+    </nav>
+
+    <main class="mockup-stage">
+      <div class="paper-zoom">
+        <article class="resume-page density-tight endfield-profile" data-resume></article>
+      </div>
+    </main>
+
+    <script type="module">
+      import { exampleMarkdown } from "../src/example.js?v=20260522";
+      import { parseResumeMarkdown } from "../src/parser.js?v=20260522";
+      import { renderResumeHtml } from "../src/render.js?v=20260522";
+      import { markContactRowStarts } from "../src/contactRows.js?v=20260522";
+
+      const doc = parseResumeMarkdown(exampleMarkdown);
+      doc.uploadedPhoto = "../frontend/public/avatar-placeholder.png";
+
+      for (const page of document.querySelectorAll("[data-resume]")) {
+        page.innerHTML = renderResumeHtml(doc);
+        wrapSectionContent(page);
+        markContactRowStarts(page);
+      }
+
+      function wrapSectionContent(page) {
+        for (const section of page.querySelectorAll(".resume-section")) {
+          const heading = section.querySelector("h2");
+
+          if (!heading || heading.nextElementSibling?.classList.contains("section-content-card")) {
+            continue;
+          }
+
+          const card = document.createElement("div");
+          card.className = "section-content-card";
+
+          while (heading.nextSibling) {
+            card.append(heading.nextSibling);
+          }
+
+          section.append(card);
+        }
+      }
+    </script>
+  </body>
+</html>
