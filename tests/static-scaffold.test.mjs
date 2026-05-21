@@ -1,0 +1,77 @@
+import test from "node:test";
+import assert from "node:assert/strict";
+import { readFile } from "node:fs/promises";
+
+test("static scaffold files include required shell hooks", async () => {
+  const [gitignore, readme, packageJson, html, appCss, templateCss, appJs, exampleJs] = await Promise.all([
+    readFile(".gitignore", "utf8"),
+    readFile("README.md", "utf8"),
+    readFile("package.json", "utf8"),
+    readFile("index.html", "utf8"),
+    readFile("styles/app.css", "utf8"),
+    readFile("styles/compact-technical.css", "utf8"),
+    readFile("src/app.js", "utf8"),
+    readFile("src/example.js", "utf8")
+  ]);
+  const pkg = JSON.parse(packageJson);
+
+  assert.equal(pkg.scripts.test, "node --test tests/*.test.mjs");
+  assert.equal(pkg.scripts.serve, "python3 -m http.server 4173");
+  assert.match(readme, /^# Markdown Resume PDF Builder$/m);
+  assert.match(readme, /npm run serve/);
+  assert.match(readme, /Open <http:\/\/localhost:4173>\./);
+  assert.match(readme, /npm test/);
+  assert.match(readme, /Click `Print \/ Save PDF`, then choose `Save as PDF` in the system print dialog\./);
+  assert.match(readme, /This project has no build step\./);
+  assert.match(gitignore, /^\.superpowers\/$/m);
+  assert.match(gitignore, /^node_modules\/$/m);
+  assert.match(gitignore, /^coverage\/$/m);
+  assert.match(html, /<link rel="stylesheet" href="\.\/styles\/app\.css\?v=\d{8}">/);
+  assert.match(html, /<link rel="stylesheet" href="\.\/styles\/compact-technical\.css\?v=\d{8}">/);
+  assert.match(html, /<textarea id="editor"/);
+  assert.match(html, /<article id="resumePage" class="resume-page density-normal"/);
+  assert.match(html, /id="photoInput"/);
+  assert.match(html, /id="removePhotoButton"/);
+  assert.match(html, /id="accentColorInput"[^>]*value="#5281F7"/);
+  assert.match(html, /id="fitButton"/);
+  assert.match(html, /id="resetButton"/);
+  assert.match(html, /id="printButton"/);
+  assert.match(appCss, /\.workspace\s*\{/);
+  assert.match(appCss, /\.editor-pane/);
+  assert.match(appCss, /\.preview-pane/);
+  assert.match(appCss, /\.file-button:focus-within/);
+  assert.match(appCss, /@media print/);
+  assert.match(templateCss, /@page\s*\{/);
+  assert.match(templateCss, /size: A4/);
+  assert.match(templateCss, /width: 210mm/);
+  assert.match(templateCss, /\.resume-page\s*\{[^}]*height: 297mm/s);
+  assert.doesNotMatch(templateCss, /\.resume-page\s*\{[^}]*min-height: 297mm/s);
+  assert.match(templateCss, /overflow: visible/);
+  assert.match(templateCss, /\.resume-header\s*\{[^}]*align-items: center/s);
+  assert.match(templateCss, /\.resume-header\s*\{[^}]*grid-template-columns: 24mm minmax\(0, 1fr\) 24mm/s);
+  assert.match(templateCss, /\.resume-profile\s*\{[^}]*grid-column: 2/s);
+  assert.match(templateCss, /\.resume-profile\s*\{[^}]*grid-row: 1/s);
+  assert.doesNotMatch(templateCss, /\.resume-profile\s*\{[^}]*grid-column: 1/s);
+  assert.match(templateCss, /\.resume-header \.resume-photo\s*\{[^}]*grid-column: 3/s);
+  assert.match(templateCss, /\.resume-header \.resume-photo\s*\{[^}]*grid-row: 1/s);
+  assert.match(templateCss, /--accent-color:\s*#5281F7/);
+  assert.match(templateCss, /--muted-color:\s*#374151/);
+  assert.match(templateCss, /\.resume-section h2\s*\{[^}]*color: var\(--accent-color\)/s);
+  assert.match(templateCss, /\.resume-section h2\s*\{[^}]*border-bottom: 1\.2pt solid var\(--accent-color\)/s);
+  assert.match(templateCss, /\.resume-section h2::after\s*\{[^}]*content: none/s);
+  assert.match(templateCss, /\.resume-contacts\s*\{[^}]*gap:\s*1pt 12pt/s);
+  assert.match(templateCss, /\.resume-contacts \.contact\s*\{[^}]*position:\s*relative/s);
+  assert.match(templateCss, /\.resume-contacts \.contact:not\(\.contact-row-start\)::before\s*\{[^}]*content:\s*"\|"/s);
+  assert.match(templateCss, /\.resume-contacts \.contact:not\(\.contact-row-start\)::before\s*\{[^}]*position:\s*absolute/s);
+  assert.match(templateCss, /\.resume-contacts \.contact:not\(\.contact-row-start\)::before\s*\{[^}]*color:\s*var\(--muted-color\)/s);
+  assert.doesNotMatch(templateCss, /contact-separator/);
+  assert.doesNotMatch(templateCss, /\.resume-section-skills p/);
+  assert.doesNotMatch(templateCss, /\.resume-section-skills li\s*\{/);
+  assert.doesNotMatch(templateCss, /\.resume-section-skills ul\s*\{[^}]*display:\s*flex/s);
+  assert.doesNotMatch(templateCss, /\.resume-section-skills ul\s*\{[^}]*flex-wrap:/s);
+  assert.match(appJs, /requiredElement/);
+  assert.match(html, /<script type="module" src="\.\/src\/app\.js\?v=\d{8}"><\/script>/);
+  assert.match(appJs, /window\.print\(\)/);
+  assert.match(exampleJs, /丰川祥子/);
+  assert.doesNotMatch(exampleJs, /照片：/);
+});

@@ -1,0 +1,7 @@
+.superpowers/
+docs/superpowers/
+node_modules/
+.DS_Store
+coverage/
+*.pdf
+*简历*.md

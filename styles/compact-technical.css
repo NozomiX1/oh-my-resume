@@ -1,0 +1,222 @@
+@page {
+  size: A4;
+  margin: 0;
+}
+
+.resume-page {
+  --page-margin: 11mm;
+  --resume-font-size: 8.7pt;
+  --resume-line-height: 1.22;
+  --section-gap: 5.5pt;
+  --item-gap: 3pt;
+  --bullet-gap: 1pt;
+  --heading-gap: 3pt;
+  --accent-color: #5281F7;
+  --text-color: #111827;
+  --muted-color: #374151;
+  --rule-color: #9ca3af;
+  --fit-scale: 1;
+
+  box-sizing: border-box;
+  width: 210mm;
+  height: 297mm;
+  padding: var(--page-margin);
+  overflow: visible;
+  color: var(--text-color);
+  background: #ffffff;
+  box-shadow: 0 18px 50px rgba(15, 23, 42, 0.18);
+  font-family: Arial, "Noto Sans SC", "Microsoft YaHei", sans-serif;
+  font-size: calc(var(--resume-font-size) * var(--fit-scale));
+  line-height: var(--resume-line-height);
+}
+
+.resume-page *,
+.resume-page *::before,
+.resume-page *::after {
+  box-sizing: border-box;
+}
+
+.resume-page.density-tight {
+  --page-margin: 10mm;
+  --resume-font-size: 8.25pt;
+  --resume-line-height: 1.22;
+  --section-gap: 4.2pt;
+  --item-gap: 2.2pt;
+  --bullet-gap: 0.5pt;
+  --heading-gap: 2.4pt;
+}
+
+.resume-page.density-ultra {
+  --page-margin: 8.5mm;
+  --resume-font-size: 7.9pt;
+  --resume-line-height: 1.16;
+  --section-gap: 3.2pt;
+  --item-gap: 1.6pt;
+  --bullet-gap: 0;
+  --heading-gap: 1.8pt;
+}
+
+.resume-header {
+  display: grid;
+  grid-template-columns: 24mm minmax(0, 1fr) 24mm;
+  column-gap: 6mm;
+  align-items: center;
+  min-height: 28mm;
+  margin-bottom: calc(var(--section-gap) * var(--fit-scale) + 1pt);
+}
+
+.resume-profile {
+  grid-column: 2;
+  grid-row: 1;
+  padding: 0;
+  text-align: center;
+}
+
+.resume-header .resume-photo {
+  grid-column: 3;
+  grid-row: 1;
+  justify-self: end;
+  width: 22mm;
+  height: 28mm;
+  object-fit: cover;
+  border: 0.4pt solid #d1d5db;
+}
+
+.resume-header h1 {
+  margin: 0 0 2pt;
+  color: #0f172a;
+  font-size: calc(17pt * var(--fit-scale));
+  line-height: 1.05;
+  font-weight: 700;
+}
+
+.resume-title {
+  margin: 0 0 2.5pt;
+  color: var(--muted-color);
+  font-size: calc(9.8pt * var(--fit-scale));
+  font-weight: 600;
+}
+
+.resume-contacts {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1pt 12pt;
+  color: var(--muted-color);
+  font-size: calc(8.4pt * var(--fit-scale));
+  line-height: 1.25;
+}
+
+.resume-contacts .contact {
+  display: inline-flex;
+  align-items: baseline;
+  position: relative;
+  white-space: nowrap;
+}
+
+.resume-contacts .contact:not(.contact-row-start)::before {
+  content: "|";
+  position: absolute;
+  left: -7pt;
+  color: var(--muted-color);
+}
+
+.resume-page a {
+  color: #1d4ed8;
+  text-decoration: none;
+}
+
+.resume-page main {
+  display: block;
+}
+
+.resume-section {
+  margin: 0 0 calc(var(--section-gap) * var(--fit-scale));
+}
+
+.resume-section h2 {
+  display: block;
+  margin: 0 0 calc(var(--heading-gap) * var(--fit-scale));
+  padding-bottom: calc(1.4pt * var(--fit-scale));
+  color: var(--accent-color);
+  border-bottom: 1.2pt solid var(--accent-color);
+  font-size: calc(10.2pt * var(--fit-scale));
+  line-height: 1.15;
+  font-weight: 700;
+}
+
+.resume-section h2::after {
+  content: none;
+}
+
+.resume-section p {
+  margin: 0 0 calc(var(--item-gap) * var(--fit-scale));
+}
+
+.resume-item {
+  margin: 0 0 calc(var(--item-gap) * var(--fit-scale));
+}
+
+.item-heading {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) max-content;
+  gap: 6pt;
+  align-items: baseline;
+  margin-bottom: calc(1pt * var(--fit-scale));
+}
+
+.item-heading h3 {
+  min-width: 0;
+  margin: 0;
+  color: #111827;
+  font-size: calc(9.4pt * var(--fit-scale));
+  line-height: 1.18;
+  font-weight: 700;
+}
+
+.item-date {
+  color: var(--muted-color);
+  font-size: calc(8.3pt * var(--fit-scale));
+  line-height: 1.15;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.item-body {
+  margin: 0;
+}
+
+.resume-page ul {
+  margin: 0 0 calc(var(--item-gap) * var(--fit-scale)) 0;
+  padding-left: 13pt;
+}
+
+.resume-page li {
+  margin: 0 0 calc(var(--bullet-gap) * var(--fit-scale));
+  padding-left: 1pt;
+}
+
+.resume-page li::marker {
+  font-size: 0.78em;
+}
+
+.resume-page li > ul {
+  margin-top: calc(var(--bullet-gap) * var(--fit-scale));
+  margin-bottom: 0;
+  padding-left: 12pt;
+}
+
+@media print {
+  html,
+  body {
+    margin: 0;
+    background: #ffffff;
+  }
+
+  .resume-page {
+    width: 210mm;
+    height: 297mm;
+    box-shadow: none;
+    overflow: visible;
+  }
+}

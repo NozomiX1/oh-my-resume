@@ -1,0 +1,245 @@
+import { exampleMarkdown } from "./example.js?v=20260522";
+import { parseResumeMarkdown } from "./parser.js?v=20260522";
+import { renderResumeHtml } from "./render.js?v=20260522";
+import { applyDensityClass, applyFitScale, getOverflowRatio } from "./fit.js?v=20260522";
+import { markContactRowStarts } from "./contactRows.js?v=20260522";
+
+const DEFAULT_ACCENT_COLOR = "#5281f7";
+
+function requiredElement(selector) {
+  const element = document.querySelector(selector);
+
+  if (!element) {
+    throw new Error(`Missing required app element: ${selector}`);
+  }
+
+  return element;
+}
+
+const editor = requiredElement("#editor");
+const resumePage = requiredElement("#resumePage");
+const warnings = requiredElement("#warnings");
+const statusLine = requiredElement("#statusLine");
+const photoInput = requiredElement("#photoInput");
+const removePhotoButton = requiredElement("#removePhotoButton");
+const accentColorInput = requiredElement("#accentColorInput");
+const fitButton = requiredElement("#fitButton");
+const resetButton = requiredElement("#resetButton");
+const printButton = requiredElement("#printButton");
+
+let uploadedPhotoUrl = "";
+let densityLevel = 0;
+let fitScale = 1;
+
+editor.value = exampleMarkdown;
+accentColorInput.value = normalizeAccentColor(accentColorInput.value);
+applyAccentColor();
+syncPhotoControls();
+
+editor.addEventListener("input", () => {
+  densityLevel = 0;
+  fitScale = 1;
+  render();
+});
+
+photoInput.addEventListener("change", () => {
+  const file = photoInput.files?.[0];
+
+  if (!file) {
+    return;
+  }
+
+  if (!file.type.startsWith("image/")) {
+    renderWarnings(["请选择图片文件作为照片。"]);
+    photoInput.value = "";
+    return;
+  }
+
+  if (uploadedPhotoUrl) {
+    URL.revokeObjectURL(uploadedPhotoUrl);
+  }
+
+  uploadedPhotoUrl = URL.createObjectURL(file);
+  syncPhotoControls();
+  render();
+});
+
+removePhotoButton.addEventListener("click", () => {
+  clearUploadedPhoto();
+  render();
+});
+
+accentColorInput.addEventListener("input", () => {
+  applyAccentColor();
+});
+
+fitButton.addEventListener("click", () => {
+  void fitOnePage();
+});
+
+resetButton.addEventListener("click", () => {
+  editor.value = exampleMarkdown;
+  densityLevel = 0;
+  fitScale = 1;
+  clearUploadedPhoto();
+  render();
+});
+
+printButton.addEventListener("click", () => {
+  render();
+  window.print();
+});
+
+function render({ updateStatus = true } = {}) {
+  const doc = parseResumeMarkdown(editor.value);
+
+  if (uploadedPhotoUrl) {
+    doc.uploadedPhoto = uploadedPhotoUrl;
+  }
+
+  resumePage.innerHTML = renderResumeHtml(doc);
+  applyDensityClass(resumePage, densityLevel);
+  applyFitScale(resumePage, fitScale);
+  markContactRowStarts(resumePage);
+  renderWarnings(doc.warnings);
+
+  if (updateStatus) {
+    requestAnimationFrame(() => {
+      updateOverflowStatus();
+    });
+  }
+}
+
+function renderWarnings(messages) {
+  const warningElements = messages.map((message) => {
+    const warning = document.createElement("div");
+    warning.textContent = message;
+    return warning;
+  });
+
+  warnings.replaceChildren(...warningElements);
+}
+
+function updateOverflowStatus() {
+  const ratio = getCurrentOverflowRatio();
+
+  if (ratio === 0) {
+    statusLine.textContent = `A4 preview · fits one page · ${densityLabel()}`;
+    return;
+  }
+
+  statusLine.textContent = `A4 preview · over by ${Math.ceil(ratio * 100)}% · ${densityLabel()}`;
+}
+
+async function fitOnePage() {
+  render({ updateStatus: false });
+  let foundFit = false;
+
+  for (let level = 0; level <= 2; level += 1) {
+    const scale = await findLargestFittingScale(level);
+
+    if (scale !== null) {
+      densityLevel = level;
+      fitScale = scale;
+      applyDensityClass(resumePage, densityLevel);
+      applyFitScale(resumePage, fitScale);
+      markContactRowStarts(resumePage);
+      foundFit = true;
+      break;
+    }
+  }
+
+  if (!foundFit) {
+    densityLevel = 2;
+    fitScale = 0.88;
+    applyDensityClass(resumePage, densityLevel);
+    applyFitScale(resumePage, fitScale);
+    markContactRowStarts(resumePage);
+    await nextFrame();
+  }
+
+  updateOverflowStatus();
+}
+
+async function findLargestFittingScale(level) {
+  applyDensityClass(resumePage, level);
+  applyFitScale(resumePage, 1);
+  markContactRowStarts(resumePage);
+  await nextFrame();
+
+  if (getCurrentOverflowRatio() === 0) {
+    return 1;
+  }
+
+  let low = 0.88;
+  let high = 1;
+
+  applyFitScale(resumePage, low);
+  markContactRowStarts(resumePage);
+  await nextFrame();
+
+  if (getCurrentOverflowRatio() > 0) {
+    return null;
+  }
+
+  for (let index = 0; index < 8; index += 1) {
+    const mid = (low + high) / 2;
+    applyFitScale(resumePage, mid);
+    markContactRowStarts(resumePage);
+    await nextFrame();
+
+    if (getCurrentOverflowRatio() === 0) {
+      low = mid;
+    } else {
+      high = mid;
+    }
+  }
+
+  return low;
+}
+
+function getCurrentOverflowRatio() {
+  return getOverflowRatio(resumePage.scrollHeight, resumePage.clientHeight);
+}
+
+function applyAccentColor() {
+  resumePage.style.setProperty("--accent-color", normalizeAccentColor(accentColorInput.value));
+}
+
+function normalizeAccentColor(value) {
+  return /^#[\da-f]{6}$/i.test(value) ? value.toLowerCase() : DEFAULT_ACCENT_COLOR;
+}
+
+function nextFrame() {
+  return new Promise((resolve) => {
+    requestAnimationFrame(resolve);
+  });
+}
+
+function densityLabel() {
+  if (densityLevel === 0) {
+    return "normal";
+  }
+
+  if (densityLevel === 1) {
+    return "tight";
+  }
+
+  return "ultra";
+}
+
+function clearUploadedPhoto() {
+  if (uploadedPhotoUrl) {
+    URL.revokeObjectURL(uploadedPhotoUrl);
+    uploadedPhotoUrl = "";
+  }
+
+  photoInput.value = "";
+  syncPhotoControls();
+}
+
+function syncPhotoControls() {
+  removePhotoButton.disabled = !uploadedPhotoUrl;
+}
+
+render();

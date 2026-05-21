@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Markdown Resume PDF Builder</title>
+    <link rel="stylesheet" href="./styles/app.css?v=20260522">
+    <link rel="stylesheet" href="./styles/compact-technical.css?v=20260522">
+  </head>
+  <body>
+    <main class="app-shell">
+      <header class="toolbar" aria-label="Resume controls">
+        <div class="toolbar-title">
+          <span class="app-name">MD Resume PDF</span>
+          <span class="template-pill">Compact Technical</span>
+        </div>
+        <div class="toolbar-actions">
+          <label class="button file-button">
+            <span>Upload Photo</span>
+            <input id="photoInput" type="file" accept="image/*">
+          </label>
+          <button id="removePhotoButton" class="button" type="button" disabled>Remove Photo</button>
+          <label class="button color-button">
+            <span>Section Color</span>
+            <input id="accentColorInput" type="color" value="#5281F7" aria-label="Section color">
+          </label>
+          <button id="fitButton" class="button" type="button">Fit One Page</button>
+          <button id="resetButton" class="button" type="button">Reset Example</button>
+          <button id="printButton" class="button primary" type="button">Print / Save PDF</button>
+        </div>
+      </header>
+
+      <section class="workspace">
+        <section class="editor-pane" aria-label="Markdown editor">
+          <div class="pane-header">
+            <h1>resume.md</h1>
+          </div>
+          <textarea id="editor" spellcheck="false" aria-label="Edit resume markdown"></textarea>
+        </section>
+
+        <section class="preview-pane" aria-label="Resume preview">
+          <div class="preview-status" id="statusLine">Ready</div>
+          <div id="warnings" class="warnings" aria-live="polite"></div>
+          <div class="paper-stage">
+            <article id="resumePage" class="resume-page density-normal" aria-label="Rendered resume"></article>
+          </div>
+        </section>
+      </section>
+    </main>
+    <script type="module" src="./src/app.js?v=20260522"></script>
+  </body>
+</html>
