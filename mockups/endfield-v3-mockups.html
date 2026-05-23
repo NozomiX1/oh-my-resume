@@ -60,19 +60,32 @@
         --endfield-rule: #bfbfbf;
         --endfield-notice-text: #2e2e2e;
         --endfield-divider: #626262;
+        --endfield-page-margin-block: 9mm;
+        --endfield-page-margin-inline: 9mm;
+        --endfield-sidebar-reserve: 8mm;
+        --endfield-content-left: calc(var(--endfield-page-margin-inline) + var(--endfield-sidebar-reserve));
+        --endfield-photo-column: 24mm;
+        --endfield-profile-gap: 4mm;
+        --endfield-header-top-gap: 8mm;
+        --endfield-sidebar-width: 11mm;
+        --endfield-header-deco-unit: 1.275mm;
+        --endfield-header-deco-top: 5.7mm;
+        --endfield-side-rail-width: var(--endfield-page-margin-inline);
+        --endfield-corner-deco-width: 2mm;
+        --endfield-corner-deco-inset: 3.5mm;
         --endfield-section-title-scale: 1.2;
 
         position: relative;
         overflow: hidden;
         background: #fff;
-        padding: 9mm 9mm 9mm 17mm;
+        padding: var(--endfield-page-margin-block) var(--endfield-page-margin-inline) var(--endfield-page-margin-block) var(--endfield-content-left);
       }
 
       .resume-page.with-endfield-tab .resume-header {
-        grid-template-columns: 24mm minmax(0, 1fr);
-        column-gap: 4mm;
+        grid-template-columns: var(--endfield-photo-column) minmax(0, 1fr);
+        column-gap: var(--endfield-profile-gap);
         align-items: center;
-        margin-top: 8mm;
+        margin-top: var(--endfield-header-top-gap);
       }
 
       .resume-page.with-endfield-tab .resume-profile {
@@ -500,7 +513,7 @@
       }
 
       .resume-page.with-endfield-tab .endfield-sidebar {
-        --sidebar-width: 11mm;
+        --sidebar-width: var(--endfield-sidebar-width);
         --sidebar-shadow-width: calc(var(--sidebar-width) * 3.1333);
         --sidebar-shadow-blur: calc(var(--sidebar-width) * 0.1333);
         --sidebar-active-height: calc(var(--sidebar-width) * 0.6667);
@@ -614,11 +627,9 @@
       }
 
       .resume-page.with-endfield-tab .endfield-header-deco-slot {
-        --endfield-header-deco-unit: 1.275mm;
-
         position: absolute;
-        top: 5.7mm;
-        left: 17mm;
+        top: var(--endfield-header-deco-top);
+        left: var(--endfield-content-left);
         z-index: 3;
         width: calc(var(--endfield-header-deco-unit) * 19.6875);
         height: calc(var(--endfield-header-deco-unit) * 3.6875);
@@ -692,13 +703,13 @@
       }
 
       .resume-page.with-endfield-tab .endfield-notice-date {
-        --endfield-notice-u: calc(9mm / 8.25);
+        --endfield-notice-u: calc(var(--endfield-side-rail-width) / 8.25);
 
         position: absolute;
         top: 0;
         right: 0;
         z-index: 3;
-        width: 9mm;
+        width: var(--endfield-side-rail-width);
         height: calc(var(--endfield-notice-u) * 37.375);
         color: var(--endfield-notice-text);
         font-family: Arial, "Noto Sans SC", "Microsoft YaHei", sans-serif;
@@ -757,11 +768,9 @@
       }
 
       .resume-page.with-endfield-tab .endfield-corner-gameplay-deco {
-        --endfield-corner-deco-width: 2mm;
-
         position: absolute;
-        right: 3.5mm;
-        bottom: 3.5mm;
+        right: var(--endfield-corner-deco-inset);
+        bottom: var(--endfield-corner-deco-inset);
         z-index: 3;
         width: var(--endfield-corner-deco-width);
         height: calc(var(--endfield-corner-deco-width) * 8.7368421053);

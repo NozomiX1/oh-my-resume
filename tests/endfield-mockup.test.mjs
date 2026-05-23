@@ -55,6 +55,41 @@ test("endfield v3 section title scales as a single official title group", async 
   );
 });
 
+test("endfield v3 quantifies its page chrome layout", async () => {
+  const html = await readFile("mockups/endfield-v3-mockups.html", "utf8");
+
+  const layoutVariables = [
+    "--endfield-page-margin-block: 9mm;",
+    "--endfield-page-margin-inline: 9mm;",
+    "--endfield-sidebar-reserve: 8mm;",
+    "--endfield-content-left: calc(var(--endfield-page-margin-inline) + var(--endfield-sidebar-reserve));",
+    "--endfield-photo-column: 24mm;",
+    "--endfield-profile-gap: 4mm;",
+    "--endfield-header-top-gap: 8mm;",
+    "--endfield-sidebar-width: 11mm;",
+    "--endfield-header-deco-unit: 1.275mm;",
+    "--endfield-header-deco-top: 5.7mm;",
+    "--endfield-side-rail-width: var(--endfield-page-margin-inline);",
+    "--endfield-corner-deco-width: 2mm;",
+    "--endfield-corner-deco-inset: 3.5mm;",
+  ];
+
+  for (const variable of layoutVariables) {
+    assert.match(html, new RegExp(variable.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")));
+  }
+
+  assert.match(
+    html,
+    /padding:\s*var\(--endfield-page-margin-block\) var\(--endfield-page-margin-inline\) var\(--endfield-page-margin-block\) var\(--endfield-content-left\);/
+  );
+  assert.match(
+    html,
+    /grid-template-columns:\s*var\(--endfield-photo-column\) minmax\(0, 1fr\);/
+  );
+  assert.match(html, /left:\s*var\(--endfield-content-left\);/);
+  assert.match(html, /width:\s*var\(--endfield-side-rail-width\);/);
+});
+
 test("endfield v3 mockup does not keep legacy template colors", async () => {
   const html = await readFile("mockups/endfield-v3-mockups.html", "utf8");
   const legacyColors = [
