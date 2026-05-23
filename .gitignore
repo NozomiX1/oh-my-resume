@@ -3,5 +3,7 @@ docs/superpowers/
 node_modules/
 .DS_Store
 coverage/
+frontend/
 *.pdf
 *简历*.md
+若叶睦.jpg

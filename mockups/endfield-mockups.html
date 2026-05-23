@@ -56,6 +56,8 @@
 
       .endfield-profile {
         --endfield-section-radius: 1.1mm;
+        position: relative;
+        isolation: isolate;
         background:
           radial-gradient(rgba(17, 24, 39, 0.14) 0.54pt, transparent 0.72pt) 0 0 / 3mm 3mm,
           rgb(236, 236, 236);
@@ -63,12 +65,17 @@
 
       .endfield-profile .resume-header {
         position: relative;
-        grid-template-columns: 32mm minmax(0, 1fr);
-        column-gap: 7mm;
+        z-index: 1;
+        grid-template-columns: calc(32mm * var(--fit-scale)) minmax(0, 1fr);
+        column-gap: calc(7mm * var(--fit-scale));
         align-items: center;
-        min-height: 43mm;
-        margin-bottom: 1mm;
-        padding: 6mm 8mm 6mm 7mm;
+        min-height: calc(43mm * var(--fit-scale));
+        margin-bottom: calc(1mm * var(--fit-scale));
+        padding:
+          calc(6mm * var(--fit-scale))
+          calc(8mm * var(--fit-scale))
+          calc(6mm * var(--fit-scale))
+          calc(7mm * var(--fit-scale));
         overflow: hidden;
         color: #f8fafc;
         background:
@@ -94,10 +101,10 @@
       .endfield-profile .resume-header::before {
         content: "";
         position: absolute;
-        top: 9mm;
-        left: 4mm;
-        width: 2.2mm;
-        height: 2.2mm;
+        top: calc(9mm * var(--fit-scale));
+        left: calc(4mm * var(--fit-scale));
+        width: calc(2.2mm * var(--fit-scale));
+        height: calc(2.2mm * var(--fit-scale));
         background: #ffd700;
       }
 
@@ -124,10 +131,10 @@
       .endfield-profile .resume-profile::before {
         content: "[ RESUME_PROFILE ]";
         display: block;
-        margin-bottom: 3pt;
+        margin-bottom: calc(3pt * var(--fit-scale));
         color: rgba(255, 255, 255, 0.36);
         font-family: "SFMono-Regular", Consolas, monospace;
-        font-size: 5.8pt;
+        font-size: calc(5.8pt * var(--fit-scale));
         font-weight: 700;
         letter-spacing: 0.08em;
       }
@@ -169,8 +176,8 @@
         justify-self: start;
         position: relative;
         z-index: 1;
-        width: 28mm;
-        height: 28mm;
+        width: calc(28mm * var(--fit-scale));
+        height: calc(28mm * var(--fit-scale));
         border: 1.2pt solid rgba(255, 255, 255, 0.9);
         outline: 1pt solid rgba(255, 215, 0, 0.82);
         outline-offset: -2.2mm;
@@ -182,12 +189,13 @@
 
       .endfield-profile main {
         position: relative;
+        z-index: 1;
       }
 
       .endfield-profile .resume-section {
         position: relative;
         z-index: 1;
-        margin-bottom: 1mm;
+        margin-bottom: calc(1mm * var(--fit-scale));
       }
 
       .endfield-profile .resume-section h2 {
@@ -196,9 +204,13 @@
         grid-template-columns: max-content minmax(0, 1fr);
         align-items: center;
         gap: 4pt;
-        min-height: 7.6mm;
-        margin-bottom: 1mm;
-        padding: 1.1mm 2.8mm 1.1mm 4mm;
+        min-height: calc(7.6mm * var(--fit-scale));
+        margin-bottom: calc(1mm * var(--fit-scale));
+        padding:
+          calc(1.1mm * var(--fit-scale))
+          calc(2.8mm * var(--fit-scale))
+          calc(1.1mm * var(--fit-scale))
+          calc(4mm * var(--fit-scale));
         overflow: visible;
         color: #f8fafc;
         border: 0;
@@ -231,10 +243,10 @@
         content: "";
         display: block;
         position: absolute;
-        top: 1.35mm;
-        bottom: 1.35mm;
-        left: 1.7mm;
-        width: 0.9mm;
+        top: calc(1.35mm * var(--fit-scale));
+        bottom: calc(1.35mm * var(--fit-scale));
+        left: calc(1.7mm * var(--fit-scale));
+        width: calc(0.9mm * var(--fit-scale));
         background: #ffea00;
         box-shadow: 0 0 4pt rgba(255, 215, 0, 0.65);
       }
@@ -246,7 +258,10 @@
       .endfield-profile .section-content-card {
         position: relative;
         overflow: hidden;
-        padding: 2mm 2.6mm 3.2mm;
+        padding:
+          calc(2mm * var(--fit-scale))
+          calc(2.6mm * var(--fit-scale))
+          calc(3.2mm * var(--fit-scale));
         color: #111827;
         background: rgb(220, 220, 220);
         border: 0.6pt solid rgba(148, 163, 184, 0.48);
@@ -260,7 +275,7 @@
         right: 0;
         bottom: 0;
         left: 0;
-        height: 1.73mm;
+        height: calc(1.73mm * var(--fit-scale));
         background: linear-gradient(180deg, rgba(220, 220, 220, 0) 0, #fff1c8 42%, #ffbf3d 100%);
       }
 
@@ -270,13 +285,160 @@
         right: 0;
         bottom: 0;
         left: 0;
-        height: 0.23mm;
+        height: calc(0.23mm * var(--fit-scale));
         background: #f4a400;
       }
 
       .endfield-profile .section-content-card > * {
         position: relative;
         z-index: 1;
+      }
+
+      .endfield-profile .paper-hud {
+        position: absolute;
+        inset: 0;
+        z-index: 0;
+        color: rgba(17, 24, 39, 0.36);
+        font-family: "SFMono-Regular", Consolas, monospace;
+        font-size: 4.4pt;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        line-height: 1.15;
+        pointer-events: none;
+        text-transform: uppercase;
+      }
+
+      .endfield-profile .paper-hud__block {
+        position: absolute;
+        display: grid;
+        gap: 0.8mm;
+      }
+
+      .endfield-profile .paper-hud__top-left {
+        top: 2.2mm;
+        left: 2.8mm;
+        width: 45mm;
+      }
+
+      .endfield-profile .paper-hud__top-right {
+        top: 2.2mm;
+        right: 2.8mm;
+        width: 58mm;
+        justify-items: end;
+        text-align: right;
+      }
+
+      .endfield-profile .paper-hud__bottom-left {
+        bottom: 2.2mm;
+        left: 2.8mm;
+        width: 52mm;
+      }
+
+      .endfield-profile .paper-hud__bottom-right {
+        right: 2.8mm;
+        bottom: 2.2mm;
+        width: 35mm;
+        justify-items: end;
+        text-align: right;
+      }
+
+      .endfield-profile .paper-hud__label {
+        color: rgba(17, 24, 39, 0.5);
+      }
+
+      .endfield-profile .paper-hud__accent {
+        color: rgba(244, 164, 0, 0.86);
+      }
+
+      .endfield-profile .paper-hud__barcode {
+        width: 34mm;
+        height: 2.8mm;
+        opacity: 0.68;
+        background:
+          repeating-linear-gradient(
+            90deg,
+            rgba(17, 24, 39, 0.42) 0 0.28mm,
+            transparent 0.28mm 0.55mm,
+            rgba(17, 24, 39, 0.42) 0.55mm 1mm,
+            transparent 1mm 1.7mm
+          );
+      }
+
+      .endfield-profile .paper-hud__status {
+        display: inline-flex;
+        align-items: end;
+        gap: 1.2mm;
+      }
+
+      .endfield-profile .paper-hud__signal {
+        display: inline-grid;
+        grid-auto-flow: column;
+        align-items: end;
+        gap: 0.35mm;
+        height: 2.7mm;
+      }
+
+      .endfield-profile .paper-hud__signal i {
+        display: block;
+        width: 0.65mm;
+        background: rgba(244, 164, 0, 0.78);
+      }
+
+      .endfield-profile .paper-hud__signal i:nth-child(1) {
+        height: 0.9mm;
+      }
+
+      .endfield-profile .paper-hud__signal i:nth-child(2) {
+        height: 1.5mm;
+      }
+
+      .endfield-profile .paper-hud__signal i:nth-child(3) {
+        height: 2.2mm;
+      }
+
+      .endfield-profile .paper-hud__ruler {
+        position: relative;
+        width: 48mm;
+        height: 7mm;
+        border-bottom: 0.55pt solid rgba(17, 24, 39, 0.34);
+        background:
+          repeating-linear-gradient(90deg, rgba(17, 24, 39, 0.38) 0 0.45pt, transparent 0.45pt 2mm);
+      }
+
+      .endfield-profile .paper-hud__ruler::before,
+      .endfield-profile .paper-hud__ruler::after {
+        position: absolute;
+        bottom: 1.7mm;
+        color: rgba(17, 24, 39, 0.4);
+      }
+
+      .endfield-profile .paper-hud__ruler::before {
+        content: "0";
+        left: 0;
+      }
+
+      .endfield-profile .paper-hud__ruler::after {
+        content: "50";
+        right: 0;
+      }
+
+      .endfield-profile .paper-hud__matrix {
+        display: grid;
+        grid-template-columns: repeat(8, 1.35mm);
+        gap: 0.35mm;
+        padding: 0.75mm;
+        border: 0.55pt solid rgba(17, 24, 39, 0.3);
+        background: rgba(255, 255, 255, 0.22);
+      }
+
+      .endfield-profile .paper-hud__matrix span {
+        width: 1.35mm;
+        height: 1.35mm;
+        background: rgba(17, 24, 39, 0.1);
+      }
+
+      .endfield-profile .paper-hud__matrix span[data-on="1"] {
+        background: rgba(17, 24, 39, 0.42);
       }
     </style>
   </head>
@@ -288,7 +450,7 @@
 
     <main class="mockup-stage">
       <div class="paper-zoom">
-        <article class="resume-page density-tight endfield-profile" data-resume></article>
+        <article class="resume-page density-normal endfield-profile" data-resume></article>
       </div>
     </main>
 
@@ -297,6 +459,7 @@
       import { parseResumeMarkdown } from "../src/parser.js?v=20260522";
       import { renderResumeHtml } from "../src/render.js?v=20260522";
       import { markContactRowStarts } from "../src/contactRows.js?v=20260522";
+      import { applyDensityClass, getOverflowRatio } from "../src/fit.js?v=20260522";
 
       const doc = parseResumeMarkdown(exampleMarkdown);
       doc.uploadedPhoto = "../frontend/public/avatar-placeholder.png";
@@ -305,6 +468,8 @@
         page.innerHTML = renderResumeHtml(doc);
         wrapSectionContent(page);
         markContactRowStarts(page);
+        addPaperHud(page);
+        void fitMockupToPage(page);
       }
 
       function wrapSectionContent(page) {
@@ -324,6 +489,113 @@
 
           section.append(card);
         }
+      }
+
+      function addPaperHud(page) {
+        const hud = document.createElement("div");
+        hud.className = "paper-hud";
+        hud.setAttribute("aria-hidden", "true");
+        hud.innerHTML = `
+          <div class="paper-hud__block paper-hud__top-left">
+            <div class="paper-hud__label">FILE OHMR-SAKIKO-02</div>
+            <div>CLASS <span class="paper-hud__accent">B-1</span> / REC 0214</div>
+            <div class="paper-hud__barcode"></div>
+          </div>
+          <div class="paper-hud__block paper-hud__top-right">
+            <div class="paper-hud__status">
+              <span>STATUS ACTIVE</span>
+              <span class="paper-hud__signal"><i></i><i></i><i></i></span>
+            </div>
+            <div>LOC 35.6812N / 139.7671E</div>
+            <div>SYNC 2026.05.21</div>
+          </div>
+          <div class="paper-hud__block paper-hud__bottom-left">
+            <div>X-AXIS / MILLIMETER GRID</div>
+            <div class="paper-hud__ruler"></div>
+          </div>
+          <div class="paper-hud__block paper-hud__bottom-right">
+            <div class="paper-hud__matrix">
+              ${"1110010110011010011011010110001111100101100101100110110010110111"
+                .split("")
+                .map((bit) => `<span data-on="${bit}"></span>`)
+                .join("")}
+            </div>
+            <div>ID HASH <span class="paper-hud__accent">7F-21-A9</span></div>
+          </div>
+        `;
+        page.append(hud);
+      }
+
+      async function fitMockupToPage(page) {
+        for (let level = 0; level <= 2; level += 1) {
+          const scale = await findLargestFittingScale(page, level);
+
+          if (scale !== null) {
+            applyDensityClass(page, level);
+            applyMockupFitScale(page, scale);
+            markContactRowStarts(page);
+            return;
+          }
+        }
+
+        applyDensityClass(page, 2);
+        applyMockupFitScale(page, 0.78);
+        markContactRowStarts(page);
+      }
+
+      async function findLargestFittingScale(page, level) {
+        applyDensityClass(page, level);
+        applyMockupFitScale(page, 1);
+        markContactRowStarts(page);
+        await nextFrame();
+
+        if (getCurrentOverflowRatio(page) === 0) {
+          return 1;
+        }
+
+        let low = 0.78;
+        let high = 1;
+
+        applyMockupFitScale(page, low);
+        markContactRowStarts(page);
+        await nextFrame();
+
+        if (getCurrentOverflowRatio(page) > 0) {
+          return null;
+        }
+
+        for (let index = 0; index < 8; index += 1) {
+          const mid = (low + high) / 2;
+          applyMockupFitScale(page, mid);
+          markContactRowStarts(page);
+          await nextFrame();
+
+          if (getCurrentOverflowRatio(page) === 0) {
+            low = mid;
+          } else {
+            high = mid;
+          }
+        }
+
+        return low;
+      }
+
+      function applyMockupFitScale(page, scale) {
+        const numericScale = Number(scale);
+        const normalizedScale = Number.isFinite(numericScale)
+          ? Math.min(Math.max(numericScale, 0.78), 1)
+          : 1;
+        page.style.setProperty("--fit-scale", normalizedScale.toFixed(3));
+      }
+
+      function getCurrentOverflowRatio(page) {
+        return getOverflowRatio(page.scrollHeight, page.clientHeight);
+      }
+
+      function nextFrame() {
+        return new Promise((resolve) => {
+          requestAnimationFrame(resolve);
+        });
       }
     </script>
   </body>
