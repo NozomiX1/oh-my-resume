@@ -39,19 +39,19 @@ test("endfield v3 section title scales as a single official title group", async 
   assert.match(html, /--endfield-section-title-scale:\s*1\.2;/);
   assert.match(
     html,
-    /\.__05-Gameplay_endfieldPre__LUcJv \{[\s\S]*?height:\s*calc\(0\.59mm \* var\(--fit-scale\) \* var\(--endfield-section-title-scale\)\);/
+    /\.__05-Gameplay_endfieldPre__LUcJv \{[\s\S]*?height:\s*calc\(0\.59mm \* var\(--endfield-section-title-effective-scale\)\);/
   );
   assert.match(
     html,
-    /\.endfield-section-title-row \{[\s\S]*?height:\s*calc\(3\.15mm \* var\(--fit-scale\) \* var\(--endfield-section-title-scale\)\);/
+    /\.endfield-section-title-row \{[\s\S]*?height:\s*calc\(3\.15mm \* var\(--endfield-section-title-effective-scale\)\);/
   );
   assert.match(
     html,
-    /\.endfield-section-title-icon \{[\s\S]*?width:\s*calc\(10\.24mm \* var\(--fit-scale\) \* var\(--endfield-section-title-scale\)\);/
+    /\.endfield-section-title-icon \{[\s\S]*?width:\s*calc\(10\.24mm \* var\(--endfield-section-title-effective-scale\)\);/
   );
   assert.match(
     html,
-    /\.endfield-section-title-text \{[\s\S]*?font-size:\s*calc\(8\.8pt \* var\(--fit-scale\) \* var\(--endfield-section-title-scale\)\);/
+    /\.endfield-section-title-text \{[\s\S]*?font-size:\s*calc\(8\.8pt \* var\(--endfield-section-title-effective-scale\)\);/
   );
 });
 
@@ -59,19 +59,19 @@ test("endfield v3 quantifies its page chrome layout", async () => {
   const html = await readFile("mockups/endfield-v3-mockups.html", "utf8");
 
   const layoutVariables = [
-    "--endfield-page-margin-block: 9mm;",
-    "--endfield-page-margin-inline: 9mm;",
-    "--endfield-sidebar-reserve: 8mm;",
+    "--endfield-page-margin-block: calc(9mm * var(--endfield-density-scale));",
+    "--endfield-page-margin-inline: calc(9mm * var(--endfield-density-scale));",
+    "--endfield-sidebar-reserve: calc(8mm * var(--endfield-density-scale));",
     "--endfield-content-left: calc(var(--endfield-page-margin-inline) + var(--endfield-sidebar-reserve));",
-    "--endfield-photo-column: 24mm;",
-    "--endfield-profile-gap: 4mm;",
-    "--endfield-header-top-gap: 8mm;",
-    "--endfield-sidebar-width: 11mm;",
+    "--endfield-photo-column: calc(24mm * var(--endfield-density-scale));",
+    "--endfield-profile-gap: calc(4mm * var(--endfield-density-scale));",
+    "--endfield-header-top-gap: calc(8mm * var(--endfield-density-scale));",
+    "--endfield-sidebar-width: calc(11mm * var(--endfield-chrome-scale));",
     "--endfield-header-deco-unit: 1.275mm;",
-    "--endfield-header-deco-top: 5.7mm;",
+    "--endfield-header-deco-top: calc(5.7mm * var(--endfield-density-scale));",
     "--endfield-side-rail-width: var(--endfield-page-margin-inline);",
     "--endfield-corner-deco-width: 2mm;",
-    "--endfield-corner-deco-inset: 3.5mm;",
+    "--endfield-corner-deco-inset: calc(3.5mm * var(--endfield-density-scale));",
   ];
 
   for (const variable of layoutVariables) {
@@ -87,7 +87,42 @@ test("endfield v3 quantifies its page chrome layout", async () => {
     /grid-template-columns:\s*var\(--endfield-photo-column\) minmax\(0, 1fr\);/
   );
   assert.match(html, /left:\s*var\(--endfield-content-left\);/);
-  assert.match(html, /width:\s*var\(--endfield-side-rail-width\);/);
+  assert.match(html, /width:\s*var\(--endfield-side-rail-effective-width\);/);
+});
+
+test("endfield v3 separates flow, density, and chrome scales", async () => {
+  const html = await readFile("mockups/endfield-v3-mockups.html", "utf8");
+
+  const scaleVariables = [
+    "--endfield-flow-scale: var(--fit-scale);",
+    "--endfield-chrome-scale: 1;",
+    "--endfield-density-scale: 1;",
+    "--endfield-section-title-effective-scale: calc(var(--endfield-flow-scale) * var(--endfield-section-title-scale));",
+    "--endfield-side-rail-effective-width: calc(var(--endfield-side-rail-width) * var(--endfield-chrome-scale));",
+    "--endfield-header-deco-effective-unit: calc(var(--endfield-header-deco-unit) * var(--endfield-chrome-scale));",
+    "--endfield-corner-deco-effective-width: calc(var(--endfield-corner-deco-width) * var(--endfield-chrome-scale));",
+  ];
+
+  for (const variable of scaleVariables) {
+    assert.match(html, new RegExp(variable.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")));
+  }
+
+  assert.match(
+    html,
+    /\.endfield-profile-heading \.__02-Operator_title__Qc2kT \{[\s\S]*?font-size:\s*calc\(20pt \* var\(--endfield-flow-scale\)\);/
+  );
+  assert.match(
+    html,
+    /\.endfield-section-title-text \{[\s\S]*?font-size:\s*calc\(8\.8pt \* var\(--endfield-section-title-effective-scale\)\);/
+  );
+  assert.match(
+    html,
+    /\.endfield-notice-date \{[\s\S]*?--endfield-notice-u:\s*calc\(var\(--endfield-side-rail-effective-width\) \/ 8\.25\);[\s\S]*?width:\s*var\(--endfield-side-rail-effective-width\);/
+  );
+  assert.match(
+    html,
+    /\.endfield-corner-gameplay-deco \{[\s\S]*?width:\s*var\(--endfield-corner-deco-effective-width\);/
+  );
 });
 
 test("endfield v3 mockup does not keep legacy template colors", async () => {
