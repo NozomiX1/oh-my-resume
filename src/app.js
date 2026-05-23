@@ -3,6 +3,13 @@ import { parseResumeMarkdown } from "./parser.js?v=20260522";
 import { renderResumeHtml } from "./render.js?v=20260522";
 import { applyDensityClass, applyFitScale, getOverflowRatio } from "./fit.js?v=20260522";
 import { markContactRowStarts } from "./contactRows.js?v=20260522";
+import {
+  DEFAULT_TEMPLATE_ID,
+  applyTemplateEnhancements,
+  applyTemplateClass,
+  normalizeTemplateId,
+  templateLabelForId
+} from "./templates.js?v=20260523";
 
 const DEFAULT_ACCENT_COLOR = "#5281f7";
 
@@ -23,6 +30,9 @@ const statusLine = requiredElement("#statusLine");
 const photoInput = requiredElement("#photoInput");
 const removePhotoButton = requiredElement("#removePhotoButton");
 const accentColorInput = requiredElement("#accentColorInput");
+const templateStandardButton = requiredElement("#templateStandardButton");
+const templateEndfieldButton = requiredElement("#templateEndfieldButton");
+const templatePill = requiredElement("#templatePill");
 const fitButton = requiredElement("#fitButton");
 const resetButton = requiredElement("#resetButton");
 const printButton = requiredElement("#printButton");
@@ -30,10 +40,12 @@ const printButton = requiredElement("#printButton");
 let uploadedPhotoUrl = "";
 let densityLevel = 0;
 let fitScale = 1;
+let currentTemplateId = DEFAULT_TEMPLATE_ID;
 
 editor.value = exampleMarkdown;
 accentColorInput.value = normalizeAccentColor(accentColorInput.value);
 applyAccentColor();
+syncTemplateControls();
 syncPhotoControls();
 
 editor.addEventListener("input", () => {
@@ -73,6 +85,14 @@ accentColorInput.addEventListener("input", () => {
   applyAccentColor();
 });
 
+templateStandardButton.addEventListener("click", () => {
+  selectTemplate("standard");
+});
+
+templateEndfieldButton.addEventListener("click", () => {
+  selectTemplate("endfield");
+});
+
 fitButton.addEventListener("click", () => {
   void fitOnePage();
 });
@@ -98,9 +118,12 @@ function render({ updateStatus = true } = {}) {
   }
 
   resumePage.innerHTML = renderResumeHtml(doc);
+  applyTemplateClass(resumePage, currentTemplateId);
   applyDensityClass(resumePage, densityLevel);
   applyFitScale(resumePage, fitScale);
   markContactRowStarts(resumePage);
+  applyTemplateEnhancements(resumePage, currentTemplateId);
+  syncTemplateControls();
   renderWarnings(doc.warnings);
 
   if (updateStatus) {
@@ -204,6 +227,40 @@ function getCurrentOverflowRatio() {
 
 function applyAccentColor() {
   resumePage.style.setProperty("--accent-color", normalizeAccentColor(accentColorInput.value));
+}
+
+function selectTemplate(templateId) {
+  const nextTemplateId = normalizeTemplateId(templateId);
+
+  if (nextTemplateId === currentTemplateId) {
+    return;
+  }
+
+  currentTemplateId = nextTemplateId;
+  render();
+}
+
+function syncTemplateControls() {
+  const isStandard = currentTemplateId === "standard";
+  const isEndfield = currentTemplateId === "endfield";
+
+  templatePill.textContent = templateLabelForId(currentTemplateId);
+  setSegmentState(templateStandardButton, isStandard);
+  setSegmentState(templateEndfieldButton, isEndfield);
+}
+
+function setSegmentState(button, isActive) {
+  button.classList.toggle?.("is-active", isActive);
+
+  if (!button.classList.toggle) {
+    if (isActive) {
+      button.classList.add("is-active");
+    } else {
+      button.classList.remove("is-active");
+    }
+  }
+
+  button.setAttribute?.("aria-pressed", String(isActive));
 }
 
 function normalizeAccentColor(value) {

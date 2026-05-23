@@ -77,6 +77,38 @@ input {
   cursor: pointer;
 }
 
+.segmented-control {
+  display: inline-flex;
+  min-height: 34px;
+  overflow: hidden;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  background: #f8fafc;
+}
+
+.segment {
+  min-width: 74px;
+  border: 0;
+  border-right: 1px solid #cbd5e1;
+  padding: 7px 10px;
+  color: #475569;
+  background: transparent;
+  cursor: pointer;
+}
+
+.segment:last-child {
+  border-right: 0;
+}
+
+.segment:hover {
+  background: #ffffff;
+}
+
+.segment.is-active {
+  color: #ffffff;
+  background: var(--accent);
+}
+
 .button:hover {
   background: #f8fafc;
 }
@@ -88,6 +120,7 @@ input {
 }
 
 .button:focus-visible,
+.segment:focus-visible,
 .file-button:focus-within,
 .color-button:focus-within {
   outline: 2px solid var(--accent);

@@ -38,6 +38,15 @@ class TestElement {
     this.innerHTML = "";
     this.textContent = children.map((child) => child.textContent).join("");
   }
+
+  insertAdjacentHTML(position, html) {
+    if (position === "afterbegin") {
+      this.innerHTML = `${html}${this.innerHTML}`;
+      return;
+    }
+
+    this.innerHTML = `${this.innerHTML}${html}`;
+  }
 }
 
 function heightForDensity(resumePage, heightsByDensity) {
@@ -70,6 +79,9 @@ function createHarness({ heightsByDensity = { normal: 125, tight: 100, ultra: 90
     "#photoInput": new TestElement(),
     "#removePhotoButton": new TestElement(),
     "#accentColorInput": new TestElement(),
+    "#templateStandardButton": new TestElement(),
+    "#templateEndfieldButton": new TestElement(),
+    "#templatePill": new TestElement(),
     "#fitButton": new TestElement(),
     "#resetButton": new TestElement(),
     "#printButton": new TestElement()
@@ -142,6 +154,7 @@ test("wires editor, rendering, density, photo, reset, and print controls", async
   const photoInput = harness.elements["#photoInput"];
   const removePhotoButton = harness.elements["#removePhotoButton"];
   const accentColorInput = harness.elements["#accentColorInput"];
+  const templatePill = harness.elements["#templatePill"];
   const fitButton = harness.elements["#fitButton"];
   const resetButton = harness.elements["#resetButton"];
   const printButton = harness.elements["#printButton"];
@@ -152,6 +165,9 @@ test("wires editor, rendering, density, photo, reset, and print controls", async
   assert.match(resumePage.innerHTML, /丰川祥子/);
   assert.equal((resumePage.innerHTML.match(/class="[^"]*\bresume-page\b/g) ?? []).length, 0);
   assert.equal(resumePage.classList.contains("resume-page"), true);
+  assert.equal(resumePage.classList.contains("template-standard"), true);
+  assert.equal(resumePage.classList.contains("template-endfield"), false);
+  assert.equal(templatePill.textContent, "Compact Technical");
   assert.equal(accentColorInput.value, "#5281f7");
   assert.equal(resumePage.style.getPropertyValue("--accent-color"), "#5281f7");
   assert.equal(warnings.children.length, 0);
@@ -168,6 +184,7 @@ test("wires editor, rendering, density, photo, reset, and print controls", async
 
   assert.equal(statusLine.textContent, "A4 preview · fits one page · tight");
   assert.equal(resumePage.classList.contains("density-tight"), true);
+  assert.equal(resumePage.classList.contains("template-standard"), true);
   assert.equal((resumePage.innerHTML.match(/\bdensity-/g) ?? []).length, 0);
 
   photoInput.files = [{ name: "avatar.png", type: "image/png" }];
@@ -206,6 +223,43 @@ test("wires editor, rendering, density, photo, reset, and print controls", async
   printButton.dispatch("click");
 
   assert.equal(harness.printed(), true);
+});
+
+test("switches templates without dropping density or fit state", async () => {
+  const harness = createHarness({ heightsByDensity: { normal: 125, tight: 100, ultra: 90 } });
+  const resumePage = harness.elements["#resumePage"];
+  const statusLine = harness.elements["#statusLine"];
+  const templatePill = harness.elements["#templatePill"];
+  const standardButton = harness.elements["#templateStandardButton"];
+  const endfieldButton = harness.elements["#templateEndfieldButton"];
+  const fitButton = harness.elements["#fitButton"];
+
+  await loadApp();
+
+  fitButton.dispatch("click");
+  await drainAnimationFrames(40);
+
+  assert.equal(resumePage.classList.contains("density-tight"), true);
+  assert.equal(statusLine.textContent, "A4 preview · fits one page · tight");
+
+  endfieldButton.dispatch("click");
+
+  assert.equal(resumePage.classList.contains("template-standard"), false);
+  assert.equal(resumePage.classList.contains("template-endfield"), true);
+  assert.equal(resumePage.classList.contains("density-tight"), true);
+  assert.equal(templatePill.textContent, "Endfield");
+  assert.equal(endfieldButton.classList.contains("is-active"), true);
+  assert.equal(standardButton.classList.contains("is-active"), false);
+  assert.match(resumePage.innerHTML, /endfield-operator-bg/);
+  assert.match(resumePage.innerHTML, /endfield-sidebar/);
+  assert.match(resumePage.innerHTML, /endfield-notice-date/);
+
+  standardButton.dispatch("click");
+
+  assert.equal(resumePage.classList.contains("template-standard"), true);
+  assert.equal(resumePage.classList.contains("template-endfield"), false);
+  assert.equal(resumePage.classList.contains("density-tight"), true);
+  assert.equal(templatePill.textContent, "Compact Technical");
 });
 
 test("fit button stops at tight when normal overflows and tight fits", async () => {

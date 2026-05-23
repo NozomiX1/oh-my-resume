@@ -6,15 +6,20 @@
     <title>Markdown Resume PDF Builder</title>
     <link rel="stylesheet" href="./styles/app.css?v=20260522">
     <link rel="stylesheet" href="./styles/compact-technical.css?v=20260522">
+    <link rel="stylesheet" href="./styles/endfield-template.css?v=20260523">
   </head>
   <body>
     <main class="app-shell">
       <header class="toolbar" aria-label="Resume controls">
         <div class="toolbar-title">
           <span class="app-name">MD Resume PDF</span>
-          <span class="template-pill">Compact Technical</span>
+          <span id="templatePill" class="template-pill">Compact Technical</span>
         </div>
         <div class="toolbar-actions">
+          <div class="segmented-control" role="group" aria-label="Resume template">
+            <button id="templateStandardButton" class="segment is-active" type="button" aria-pressed="true">普通</button>
+            <button id="templateEndfieldButton" class="segment" type="button" aria-pressed="false">Endfield</button>
+          </div>
           <label class="button file-button">
             <span>Upload Photo</span>
             <input id="photoInput" type="file" accept="image/*">
@@ -42,7 +47,7 @@
           <div class="preview-status" id="statusLine">Ready</div>
           <div id="warnings" class="warnings" aria-live="polite"></div>
           <div class="paper-stage">
-            <article id="resumePage" class="resume-page density-normal" aria-label="Rendered resume"></article>
+            <article id="resumePage" class="resume-page template-standard density-normal" aria-label="Rendered resume"></article>
           </div>
         </section>
       </section>

@@ -3,14 +3,17 @@ import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 
 test("static scaffold files include required shell hooks", async () => {
-  const [gitignore, readme, packageJson, html, appCss, templateCss, appJs, exampleJs] = await Promise.all([
+  const [gitignore, readme, packageJson, html, appCss, templateCss, endfieldCss, appJs, templatesJs, endfieldTemplateJs, exampleJs] = await Promise.all([
     readFile(".gitignore", "utf8"),
     readFile("README.md", "utf8"),
     readFile("package.json", "utf8"),
     readFile("index.html", "utf8"),
     readFile("styles/app.css", "utf8"),
     readFile("styles/compact-technical.css", "utf8"),
+    readFile("styles/endfield-template.css", "utf8"),
     readFile("src/app.js", "utf8"),
+    readFile("src/templates.js", "utf8"),
+    readFile("src/endfieldTemplate.js", "utf8"),
     readFile("src/example.js", "utf8")
   ]);
   const pkg = JSON.parse(packageJson);
@@ -28,8 +31,12 @@ test("static scaffold files include required shell hooks", async () => {
   assert.match(gitignore, /^coverage\/$/m);
   assert.match(html, /<link rel="stylesheet" href="\.\/styles\/app\.css\?v=\d{8}">/);
   assert.match(html, /<link rel="stylesheet" href="\.\/styles\/compact-technical\.css\?v=\d{8}">/);
+  assert.match(html, /<link rel="stylesheet" href="\.\/styles\/endfield-template\.css\?v=\d{8}">/);
+  assert.match(html, /id="templatePill"/);
+  assert.match(html, /id="templateStandardButton"/);
+  assert.match(html, /id="templateEndfieldButton"/);
   assert.match(html, /<textarea id="editor"/);
-  assert.match(html, /<article id="resumePage" class="resume-page density-normal"/);
+  assert.match(html, /<article id="resumePage" class="resume-page template-standard density-normal"/);
   assert.match(html, /id="photoInput"/);
   assert.match(html, /id="removePhotoButton"/);
   assert.match(html, /id="accentColorInput"[^>]*value="#5281F7"/);
@@ -69,7 +76,25 @@ test("static scaffold files include required shell hooks", async () => {
   assert.doesNotMatch(templateCss, /\.resume-section-skills li\s*\{/);
   assert.doesNotMatch(templateCss, /\.resume-section-skills ul\s*\{[^}]*display:\s*flex/s);
   assert.doesNotMatch(templateCss, /\.resume-section-skills ul\s*\{[^}]*flex-wrap:/s);
+  assert.match(endfieldCss, /\.resume-page\.template-endfield\s*\{/);
+  assert.match(endfieldCss, /--endfield-template-ready:\s*1/);
+  assert.match(endfieldCss, /endfield-operator-bg/);
+  assert.match(endfieldCss, /endfield-profile-heading/);
+  assert.match(endfieldCss, /\.resume-page\.template-endfield \.endfield-profile-tags::before\s*\{/);
+  assert.doesNotMatch(endfieldCss, /\.resume-page\.template-endfield \.resume-title::after\s*\{/);
+  assert.match(endfieldCss, /\.\.\/mockups\/assets\/prof-assault\.jpg/);
+  assert.match(endfieldCss, /\.\.\/mockups\/assets\/left-deco-text\.png/);
   assert.match(appJs, /requiredElement/);
+  assert.match(appJs, /applyTemplateClass/);
+  assert.match(appJs, /applyTemplateEnhancements/);
+  assert.match(templatesJs, /applyTemplateEnhancements/);
+  assert.match(endfieldTemplateJs, /applyEndfieldTemplate/);
+  assert.match(endfieldTemplateJs, /endfield-sidebar/);
+  assert.match(endfieldTemplateJs, /endfield-operator-bg/);
+  assert.match(endfieldTemplateJs, /viewBox="0 0 214 233"/);
+  assert.match(endfieldTemplateJs, /M95\.1 95\.5V115L63\.5 92\.7/);
+  assert.match(endfieldTemplateJs, /viewBox="0 0 122 6" class="SectionTitle_icon__YpILA"/);
+  assert.doesNotMatch(endfieldTemplateJs, /<text[^>]*>终<\/text>/);
   assert.match(html, /<script type="module" src="\.\/src\/app\.js\?v=\d{8}"><\/script>/);
   assert.match(appJs, /window\.print\(\)/);
   assert.match(exampleJs, /丰川祥子/);
