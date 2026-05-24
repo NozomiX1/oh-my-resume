@@ -1,31 +1,35 @@
 # Oh My Resume
 
-A static Markdown resume editor that renders a compact technical A4 resume preview and exports through the browser print dialog.
+一个静态的 Markdown 简历编辑器。左侧编辑 Markdown，右侧实时预览 A4 简历，并通过浏览器打印导出 PDF。
 
-## Run locally
+在线使用：
+
+<https://nozomix1.github.io/oh-my-resume/>
+
+## 本地运行
 
 ```bash
 npm run serve
 ```
 
-Open <http://localhost:4173>.
+打开 <http://localhost:4173>。
 
-## Test
+## 测试
 
 ```bash
 npm test
 ```
 
-## Export PDF
+## 导出 PDF
 
-Click `Print / Save PDF`, then choose `Save as PDF` in the system print dialog.
+点击 `Print / Save PDF`，然后在系统打印窗口中选择 `Save as PDF`。
 
-Chrome is recommended for PDF export. In the print dialog, enable `Background graphics` so template decorations and accent blocks are included.
+推荐使用 Chrome 导出 PDF。打印时请勾选 `Background graphics`，这样模板装饰、色块和背景元素才会被保留。
 
-## Photos
+## 照片
 
-Photos are controlled from the toolbar. Upload an image to add it to the preview, or click `Remove Photo` to clear it. Markdown `照片` or `头像` fields are ignored.
+照片由工具栏控制。上传图片后会自动加入预览，点击 `Remove Photo` 可以移除。Markdown 中的 `照片` 或 `头像` 字段会被忽略。
 
-## Deployment
+## 部署
 
-This project has no build step. It can be deployed directly with GitHub Pages by serving the repository root.
+这个项目没有构建步骤，可以直接用 GitHub Pages 发布仓库根目录。
