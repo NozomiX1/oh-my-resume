@@ -1,4 +1,4 @@
-# Markdown Resume PDF Builder
+# Oh My Resume
 
 A static Markdown resume editor that renders a compact technical A4 resume preview and exports through the browser print dialog.
 
@@ -19,6 +19,8 @@ npm test
 ## Export PDF
 
 Click `Print / Save PDF`, then choose `Save as PDF` in the system print dialog.
+
+Chrome is recommended for PDF export. In the print dialog, enable `Background graphics` so template decorations and accent blocks are included.
 
 ## Photos
 

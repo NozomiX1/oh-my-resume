@@ -2,15 +2,15 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 
-test("endfield v3 mockup uses official Endfield yellow", async () => {
-  const html = await readFile("mockups/endfield-v3-mockups.html", "utf8");
+test("endfield template uses official Endfield yellow", async () => {
+  const html = await readFile("styles/endfield-template.css", "utf8");
 
   assert.match(html, /--endfield-yellow:\s*#fffa00;/);
   assert.doesNotMatch(html, /rgb\(254,\s*250,\s*83\)/);
 });
 
-test("endfield v3 mockup keeps official operator accent colors", async () => {
-  const html = await readFile("mockups/endfield-v3-mockups.html", "utf8");
+test("endfield template keeps official operator accent colors", async () => {
+  const html = await readFile("styles/endfield-template.css", "utf8");
 
   assert.match(html, /--endfield-magenta:\s*#ff00f0;/);
   assert.match(html, /--endfield-teal:\s*#00ffa2;/);
@@ -18,8 +18,8 @@ test("endfield v3 mockup keeps official operator accent colors", async () => {
   assert.doesNotMatch(html, /rgb\(117,\s*251,\s*170\)/);
 });
 
-test("endfield v3 mockup keeps official bracket colors by context", async () => {
-  const html = await readFile("mockups/endfield-v3-mockups.html", "utf8");
+test("endfield template keeps official bracket colors by context", async () => {
+  const html = await readFile("styles/endfield-template.css", "utf8");
 
   assert.match(html, /--endfield-title-bracket:\s*#797979;/);
   assert.match(html, /--endfield-muted:\s*#999;/);
@@ -33,8 +33,8 @@ test("endfield v3 mockup keeps official bracket colors by context", async () => 
   );
 });
 
-test("endfield v3 section title scales as a single official title group", async () => {
-  const html = await readFile("mockups/endfield-v3-mockups.html", "utf8");
+test("endfield template section title scales as a single official title group", async () => {
+  const html = await readFile("styles/endfield-template.css", "utf8");
 
   assert.match(html, /--endfield-section-title-scale:\s*1\.2;/);
   assert.match(
@@ -55,8 +55,8 @@ test("endfield v3 section title scales as a single official title group", async 
   );
 });
 
-test("endfield v3 quantifies its page chrome layout", async () => {
-  const html = await readFile("mockups/endfield-v3-mockups.html", "utf8");
+test("endfield template quantifies its page chrome layout", async () => {
+  const html = await readFile("styles/endfield-template.css", "utf8");
 
   const layoutVariables = [
     "--endfield-page-margin-block: calc(9mm * var(--endfield-density-scale));",
@@ -90,8 +90,8 @@ test("endfield v3 quantifies its page chrome layout", async () => {
   assert.match(html, /width:\s*var\(--endfield-side-rail-effective-width\);/);
 });
 
-test("endfield v3 separates flow, density, and chrome scales", async () => {
-  const html = await readFile("mockups/endfield-v3-mockups.html", "utf8");
+test("endfield template separates flow, density, and chrome scales", async () => {
+  const html = await readFile("styles/endfield-template.css", "utf8");
 
   const scaleVariables = [
     "--endfield-flow-scale: var(--fit-scale);",
@@ -125,8 +125,8 @@ test("endfield v3 separates flow, density, and chrome scales", async () => {
   );
 });
 
-test("endfield v3 mockup does not keep legacy template colors", async () => {
-  const html = await readFile("mockups/endfield-v3-mockups.html", "utf8");
+test("endfield template does not keep legacy template colors", async () => {
+  const html = await readFile("styles/endfield-template.css", "utf8");
   const legacyColors = [
     "#111827",
     "#1f2933",
@@ -142,6 +142,6 @@ test("endfield v3 mockup does not keep legacy template colors", async () => {
   ];
 
   for (const color of legacyColors) {
-    assert.doesNotMatch(html, new RegExp(color, "i"), `${color} should not appear in v3 mockup`);
+    assert.doesNotMatch(html, new RegExp(color, "i"), `${color} should not appear in template`);
   }
 });

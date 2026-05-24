@@ -18,13 +18,16 @@ test("static scaffold files include required shell hooks", async () => {
   ]);
   const pkg = JSON.parse(packageJson);
 
+  assert.equal(pkg.name, "oh-my-resume");
   assert.equal(pkg.scripts.test, "node --test tests/*.test.mjs");
   assert.equal(pkg.scripts.serve, "python3 -m http.server 4173");
-  assert.match(readme, /^# Markdown Resume PDF Builder$/m);
+  assert.match(readme, /^# Oh My Resume$/m);
   assert.match(readme, /npm run serve/);
   assert.match(readme, /Open <http:\/\/localhost:4173>\./);
   assert.match(readme, /npm test/);
   assert.match(readme, /Click `Print \/ Save PDF`, then choose `Save as PDF` in the system print dialog\./);
+  assert.match(readme, /Chrome is recommended for PDF export/);
+  assert.match(readme, /Background graphics/);
   assert.match(readme, /This project has no build step\./);
   assert.match(gitignore, /^\.superpowers\/$/m);
   assert.match(gitignore, /^node_modules\/$/m);
@@ -43,6 +46,8 @@ test("static scaffold files include required shell hooks", async () => {
   assert.match(html, /id="fitButton"/);
   assert.match(html, /id="resetButton"/);
   assert.match(html, /id="printButton"/);
+  assert.match(html, /<title>Oh My Resume<\/title>/);
+  assert.match(html, /<span class="app-name">Oh My Resume<\/span>/);
   assert.match(appCss, /\.workspace\s*\{/);
   assert.match(appCss, /\.editor-pane/);
   assert.match(appCss, /\.preview-pane/);
@@ -91,8 +96,9 @@ test("static scaffold files include required shell hooks", async () => {
   assert.match(endfieldCss, /\.resume-page\.template-endfield \.endfield-bg-flag\s*\{[^}]*display:\s*none/s);
   assert.match(endfieldCss, /\.resume-page\.template-endfield \.endfield-bg-plus\s*\{[^}]*display:\s*none/s);
   assert.doesNotMatch(endfieldCss, /\.resume-page\.template-endfield \.resume-title::after\s*\{/);
-  assert.match(endfieldCss, /\.\.\/mockups\/assets\/prof-assault\.jpg/);
-  assert.match(endfieldCss, /\.\.\/mockups\/assets\/left-deco-text\.png/);
+  assert.doesNotMatch(endfieldCss, /mockups\/assets/);
+  assert.match(endfieldCss, /\.\.\/assets\/endfield\/prof-assault\.jpg/);
+  assert.match(endfieldCss, /\.\.\/assets\/endfield\/left-deco-text\.png/);
   assert.match(appJs, /requiredElement/);
   assert.match(appJs, /applyTemplateClass/);
   assert.match(appJs, /applyTemplateEnhancements/);

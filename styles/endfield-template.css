@@ -1,4 +1,4 @@
-/* Endfield template skin migrated from mockups/endfield-v3-mockups.html. */
+/* Endfield template skin. */
 .resume-page.template-endfield {
         --endfield-template-ready: 1;
         --endfield-yellow: #fffa00;
@@ -106,9 +106,9 @@
         width: calc(var(--endfield-operator-u) * 42);
         height: calc(var(--endfield-operator-u) * 31);
         background-image:
-          url("../mockups/assets/endfield-wave-bg.png"),
-          url("../mockups/assets/endfield-wave-bg.png"),
-          url("../mockups/assets/endfield-wave-bg.png");
+          url("../assets/endfield/endfield-wave-bg.png"),
+          url("../assets/endfield/endfield-wave-bg.png"),
+          url("../assets/endfield/endfield-wave-bg.png");
         background-position: 100% 0;
         background-repeat: no-repeat;
         background-size: contain;
@@ -150,7 +150,7 @@
         bottom: calc(var(--endfield-operator-u) * 3.0625);
         width: calc(100% - var(--endfield-operator-u) * 4.125);
         height: calc(100% - var(--endfield-operator-u) * 3.0625);
-        background-image: url("../mockups/assets/endfield-block-bg.svg");
+        background-image: url("../assets/endfield/endfield-block-bg.svg");
         background-position: left bottom 3px;
         background-size: calc(var(--endfield-operator-u) * 12.8125) calc(var(--endfield-operator-u) * 12.8125);
         opacity: 0.55;
@@ -207,8 +207,8 @@
         width: calc(var(--endfield-operator-u) * 59.125);
         height: 100%;
         background-image:
-          url("../mockups/assets/endfield-tape-wave-bg.png"),
-          url("../mockups/assets/endfield-tape-wave-bg.png");
+          url("../assets/endfield/endfield-tape-wave-bg.png"),
+          url("../assets/endfield/endfield-tape-wave-bg.png");
         background-position: 50%;
         background-repeat: no-repeat;
         background-size: cover;
@@ -277,11 +277,11 @@
       }
 
       .resume-page.template-endfield .endfield-profile-heading .__02-Operator_icon__GnwPC[data-key="assault"] {
-        background-image: url("../mockups/assets/prof-assault.jpg");
+        background-image: url("../assets/endfield/prof-assault.jpg");
       }
 
       .resume-page.template-endfield .endfield-profile-heading .__02-Operator_icon__GnwPC[data-key="electric"] {
-        background-image: url("../mockups/assets/ele-electric.jpg");
+        background-image: url("../assets/endfield/ele-electric.jpg");
       }
 
       .resume-page.template-endfield .endfield-profile-heading .__02-Operator_nameContainer__yjlQE {
@@ -709,7 +709,7 @@
         height: calc(var(--endfield-notice-u) * 10.875);
         margin-top: calc(var(--endfield-notice-u) * 1.5);
         margin-left: calc(var(--endfield-notice-u) * 0.25);
-        background-image: url("../mockups/assets/left-deco-text.png");
+        background-image: url("../assets/endfield/left-deco-text.png");
         background-position: 50%;
         background-repeat: no-repeat;
         background-size: contain;
