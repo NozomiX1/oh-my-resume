@@ -116,6 +116,7 @@
       }
 
       .resume-page.template-endfield .endfield-bg-shallow {
+        display: none;
         position: absolute;
         bottom: 0;
         left: var(--endfield-bg-anchor-x);
@@ -173,22 +174,8 @@
         top: calc(50% - var(--endfield-operator-u) * 18.3125);
         height: calc(var(--endfield-operator-u) * 21.5625);
         padding-right: calc(var(--endfield-operator-u) * 1);
-        color: transparent;
-        background-clip: text;
-        -webkit-background-clip: text;
-        background-image: linear-gradient(
-          -45deg,
-          transparent,
-          transparent 20.5805011712%,
-          #000000 0,
-          #000000 29.4194988288%,
-          transparent 0,
-          transparent 70.5805011712%,
-          #000000 0,
-          #000000 79.4194988288%,
-          transparent 0,
-          transparent
-        );
+        color: #e1e1e1;
+        background-image: none;
         background-position: 0 0;
         background-repeat: repeat;
         background-size: calc(var(--endfield-operator-u) * 0.5) calc(var(--endfield-operator-u) * 0.5);
@@ -197,11 +184,12 @@
         font-weight: 900;
         letter-spacing: -0.08em;
         line-height: 0.58;
-        opacity: 0.24;
+        opacity: 1;
         white-space: nowrap;
       }
 
       .resume-page.template-endfield .endfield-bg-tape {
+        display: none;
         position: absolute;
         left: 0;
         top: calc(50% + var(--endfield-operator-u) * 3.8125);
@@ -251,6 +239,7 @@
       }
 
       .resume-page.template-endfield .endfield-bg-plus {
+        display: none;
         position: absolute;
         left: calc(50% - var(--endfield-operator-u) * 72.25);
         top: calc(var(--endfield-operator-u) * 5.9375);

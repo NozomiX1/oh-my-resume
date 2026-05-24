@@ -29,9 +29,9 @@ test("static scaffold files include required shell hooks", async () => {
   assert.match(gitignore, /^\.superpowers\/$/m);
   assert.match(gitignore, /^node_modules\/$/m);
   assert.match(gitignore, /^coverage\/$/m);
-  assert.match(html, /<link rel="stylesheet" href="\.\/styles\/app\.css\?v=\d{8}">/);
-  assert.match(html, /<link rel="stylesheet" href="\.\/styles\/compact-technical\.css\?v=\d{8}">/);
-  assert.match(html, /<link rel="stylesheet" href="\.\/styles\/endfield-template\.css\?v=\d{8}">/);
+  assert.match(html, /<link rel="stylesheet" href="\.\/styles\/app\.css\?v=\d{8,}">/);
+  assert.match(html, /<link rel="stylesheet" href="\.\/styles\/compact-technical\.css\?v=\d{8,}">/);
+  assert.match(html, /<link rel="stylesheet" href="\.\/styles\/endfield-template\.css\?v=\d{8,}">/);
   assert.match(html, /id="templatePill"/);
   assert.match(html, /id="templateStandardButton"/);
   assert.match(html, /id="templateEndfieldButton"/);
@@ -81,6 +81,15 @@ test("static scaffold files include required shell hooks", async () => {
   assert.match(endfieldCss, /endfield-operator-bg/);
   assert.match(endfieldCss, /endfield-profile-heading/);
   assert.match(endfieldCss, /\.resume-page\.template-endfield \.endfield-profile-tags::before\s*\{/);
+  assert.match(endfieldCss, /\.resume-page\.template-endfield \.endfield-bg-hollow\s*\{[^}]*color:\s*#e1e1e1/s);
+  assert.match(endfieldCss, /\.resume-page\.template-endfield \.endfield-bg-hollow\s*\{[^}]*background-image:\s*none/s);
+  assert.doesNotMatch(endfieldCss, /\.resume-page\.template-endfield \.endfield-bg-hollow\s*\{[^}]*background-clip/s);
+  assert.match(endfieldCss, /\.resume-page\.template-endfield \.endfield-bg-deco::before\s*\{[^}]*endfield-wave-bg\.png/s);
+  assert.match(endfieldCss, /\.resume-page\.template-endfield \.endfield-bg-deco-line\s*\{/);
+  assert.match(endfieldCss, /\.resume-page\.template-endfield \.endfield-bg-shallow\s*\{[^}]*display:\s*none/s);
+  assert.match(endfieldCss, /\.resume-page\.template-endfield \.endfield-bg-tape\s*\{[^}]*display:\s*none/s);
+  assert.match(endfieldCss, /\.resume-page\.template-endfield \.endfield-bg-flag\s*\{[^}]*display:\s*none/s);
+  assert.match(endfieldCss, /\.resume-page\.template-endfield \.endfield-bg-plus\s*\{[^}]*display:\s*none/s);
   assert.doesNotMatch(endfieldCss, /\.resume-page\.template-endfield \.resume-title::after\s*\{/);
   assert.match(endfieldCss, /\.\.\/mockups\/assets\/prof-assault\.jpg/);
   assert.match(endfieldCss, /\.\.\/mockups\/assets\/left-deco-text\.png/);
@@ -95,7 +104,7 @@ test("static scaffold files include required shell hooks", async () => {
   assert.match(endfieldTemplateJs, /M95\.1 95\.5V115L63\.5 92\.7/);
   assert.match(endfieldTemplateJs, /viewBox="0 0 122 6" class="SectionTitle_icon__YpILA"/);
   assert.doesNotMatch(endfieldTemplateJs, /<text[^>]*>终<\/text>/);
-  assert.match(html, /<script type="module" src="\.\/src\/app\.js\?v=\d{8}"><\/script>/);
+  assert.match(html, /<script type="module" src="\.\/src\/app\.js\?v=\d{8,}"><\/script>/);
   assert.match(appJs, /window\.print\(\)/);
   assert.match(exampleJs, /丰川祥子/);
   assert.doesNotMatch(exampleJs, /照片：/);
