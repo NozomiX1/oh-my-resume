@@ -25,7 +25,7 @@
   color: var(--text-color);
   background: #ffffff;
   box-shadow: 0 18px 50px rgba(15, 23, 42, 0.18);
-  font-family: Arial, "Noto Sans SC", "Microsoft YaHei", sans-serif;
+  font-family: "PingFang SC", "Noto Sans SC", "Microsoft YaHei", Arial, sans-serif;
   font-size: calc(var(--resume-font-size) * var(--fit-scale));
   line-height: var(--resume-line-height);
 }
@@ -126,6 +126,10 @@
   text-decoration: none;
 }
 
+.resume-page strong {
+  font-weight: 700;
+}
+
 .resume-page main {
   display: block;
 }
@@ -187,6 +191,7 @@
 }
 
 .resume-page ul {
+  list-style-type: disc;
   margin: 0 0 calc(var(--item-gap) * var(--fit-scale)) 0;
   padding-left: 13pt;
 }
@@ -197,13 +202,18 @@
 }
 
 .resume-page li::marker {
-  font-size: 0.78em;
+  font-size: 0.88em;
 }
 
 .resume-page li > ul {
+  list-style-type: circle;
   margin-top: calc(var(--bullet-gap) * var(--fit-scale));
   margin-bottom: 0;
   padding-left: 12pt;
+}
+
+.resume-page li li::marker {
+  font-size: 0.72em;
 }
 
 @media print {

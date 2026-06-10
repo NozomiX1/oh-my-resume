@@ -59,6 +59,7 @@ test("static scaffold files include required shell hooks", async () => {
   assert.match(templateCss, /size: A4/);
   assert.match(templateCss, /width: 210mm/);
   assert.match(templateCss, /\.resume-page\s*\{[^}]*height: 297mm/s);
+  assert.match(templateCss, /font-family:\s*"PingFang SC", "Noto Sans SC", "Microsoft YaHei", Arial, sans-serif/);
   assert.doesNotMatch(templateCss, /\.resume-page\s*\{[^}]*min-height: 297mm/s);
   assert.match(templateCss, /overflow: visible/);
   assert.match(templateCss, /\.resume-header\s*\{[^}]*align-items: center/s);
@@ -79,6 +80,11 @@ test("static scaffold files include required shell hooks", async () => {
   assert.match(templateCss, /\.resume-contacts \.contact:not\(\.contact-row-start\)::before\s*\{[^}]*position:\s*absolute/s);
   assert.match(templateCss, /\.resume-contacts \.contact:not\(\.contact-row-start\)::before\s*\{[^}]*color:\s*var\(--muted-color\)/s);
   assert.doesNotMatch(templateCss, /contact-separator/);
+  assert.match(templateCss, /\.resume-page strong\s*\{[^}]*font-weight:\s*700/s);
+  assert.match(templateCss, /\.resume-page ul\s*\{[^}]*list-style-type:\s*disc/s);
+  assert.match(templateCss, /\.resume-page li::marker\s*\{[^}]*font-size:\s*0\.88em/s);
+  assert.match(templateCss, /\.resume-page li > ul\s*\{[^}]*list-style-type:\s*circle/s);
+  assert.match(templateCss, /\.resume-page li li::marker\s*\{[^}]*font-size:\s*0\.72em/s);
   assert.doesNotMatch(templateCss, /\.resume-section-skills p/);
   assert.doesNotMatch(templateCss, /\.resume-section-skills li\s*\{/);
   assert.doesNotMatch(templateCss, /\.resume-section-skills ul\s*\{[^}]*display:\s*flex/s);
