@@ -1,7 +1,7 @@
 import { exampleMarkdown } from "./example.js?v=20260522";
 import { parseResumeMarkdown } from "./parser.js?v=20260522";
 import { renderResumeHtml } from "./render.js?v=20260522";
-import { applyDensityClass, applyFitScale, getOverflowRatio } from "./fit.js?v=20260522";
+import { applyDensityClass, applyFitScale, getContentBoxOverflowRatio, getOverflowRatio } from "./fit.js?v=2026061001";
 import { markContactRowStarts } from "./contactRows.js?v=20260522";
 import {
   DEFAULT_TEMPLATE_ID,
@@ -222,7 +222,84 @@ async function findLargestFittingScale(level) {
 }
 
 function getCurrentOverflowRatio() {
-  return getOverflowRatio(resumePage.scrollHeight, resumePage.clientHeight);
+  const visualRatio = getCurrentVisualOverflowRatio();
+  const scrollRatio = getOverflowRatio(resumePage.scrollHeight, resumePage.clientHeight);
+
+  if (visualRatio === null) {
+    return scrollRatio;
+  }
+
+  return Math.max(visualRatio, scrollRatio);
+}
+
+function getCurrentVisualOverflowRatio() {
+  const pageRect = rectForElement(resumePage);
+
+  if (!pageRect || typeof getComputedStyle !== "function") {
+    return null;
+  }
+
+  const contentBottom = getFlowContentBottom(resumePage, pageRect.top);
+
+  if (contentBottom === null) {
+    return null;
+  }
+
+  return getContentBoxOverflowRatio(
+    contentBottom,
+    pageRect.height,
+    parseCssPixels(getComputedStyle(resumePage).paddingBottom)
+  );
+}
+
+function getFlowContentBottom(root, rootTop) {
+  let bottom = null;
+
+  for (const child of Array.from(root.children ?? [])) {
+    if (isOutOfFlow(child)) {
+      continue;
+    }
+
+    const rect = rectForElement(child);
+
+    if (!rect || (rect.width <= 0 && rect.height <= 0)) {
+      continue;
+    }
+
+    bottom = Math.max(bottom ?? rect.bottom, rect.bottom);
+  }
+
+  return bottom === null ? null : bottom - rootTop;
+}
+
+function isOutOfFlow(element) {
+  const style = typeof getComputedStyle === "function" ? getComputedStyle(element) : null;
+
+  return style?.display === "none" || style?.position === "absolute" || style?.position === "fixed";
+}
+
+function rectForElement(element) {
+  if (typeof element?.getBoundingClientRect !== "function") {
+    return null;
+  }
+
+  const rect = element.getBoundingClientRect();
+
+  if (
+    !Number.isFinite(rect?.top) ||
+    !Number.isFinite(rect?.bottom) ||
+    !Number.isFinite(rect?.height)
+  ) {
+    return null;
+  }
+
+  return rect;
+}
+
+function parseCssPixels(value) {
+  const pixels = Number.parseFloat(value);
+
+  return Number.isFinite(pixels) ? pixels : 0;
 }
 
 function applyAccentColor() {

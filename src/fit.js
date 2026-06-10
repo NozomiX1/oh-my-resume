@@ -38,6 +38,22 @@ export function getOverflowRatio(contentHeight, pageHeight) {
   return (contentHeight - pageHeight) / pageHeight;
 }
 
+export function getContentBoxOverflowRatio(contentBottom, pageHeight, paddingBottom) {
+  const numericContentBottom = Number(contentBottom);
+  const numericPageHeight = Number(pageHeight);
+  const numericPaddingBottom = Number(paddingBottom);
+
+  if (
+    !Number.isFinite(numericContentBottom) ||
+    !Number.isFinite(numericPageHeight) ||
+    !Number.isFinite(numericPaddingBottom)
+  ) {
+    return 0;
+  }
+
+  return getOverflowRatio(numericContentBottom, numericPageHeight - Math.max(numericPaddingBottom, 0));
+}
+
 export function applyDensityClass(element, level) {
   element.classList.remove(...DENSITY_CLASSES);
   element.classList.add(densityClassForLevel(level));

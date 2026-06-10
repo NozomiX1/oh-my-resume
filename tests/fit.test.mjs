@@ -3,6 +3,7 @@ import assert from "node:assert/strict";
 import {
   applyDensityClass,
   densityClassForLevel,
+  getContentBoxOverflowRatio,
   getOverflowRatio,
   nextDensityLevel
 } from "../src/fit.js";
@@ -28,6 +29,11 @@ test("calculates overflow ratio", () => {
   assert.equal(getOverflowRatio(100, 100), 0);
   assert.equal(getOverflowRatio(125, 100), 0.25);
   assert.equal(getOverflowRatio(90, 100), 0);
+});
+
+test("calculates overflow before content enters the bottom page padding", () => {
+  assert.equal(getContentBoxOverflowRatio(90, 100, 10), 0);
+  assert.equal(getContentBoxOverflowRatio(100, 100, 10), 10 / 90);
 });
 
 test("returns no overflow for invalid page height", () => {

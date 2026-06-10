@@ -64,6 +64,15 @@ function heightForDensity(resumePage, heightsByDensity) {
   return scaled(heightsByDensity.normal);
 }
 
+function createRect({ top = 0, bottom = 0, width = 100 } = {}) {
+  return {
+    top,
+    bottom,
+    height: bottom - top,
+    width
+  };
+}
+
 async function drainAnimationFrames(count = 4) {
   for (let index = 0; index < count; index += 1) {
     await Promise.resolve();
@@ -121,6 +130,13 @@ function createHarness({ heightsByDensity = { normal: 125, tight: 100, ultra: 90
   };
   globalThis.requestAnimationFrame = (callback) => {
     callback();
+  };
+  globalThis.getComputedStyle = (element) => {
+    return {
+      display: element.computedStyle?.display ?? "block",
+      paddingBottom: element.computedStyle?.paddingBottom ?? "0px",
+      position: element.computedStyle?.position ?? "static"
+    };
   };
   globalThis.URL.createObjectURL = (object) => {
     createdObjects.push(object);
@@ -319,6 +335,38 @@ test("fit button chooses the least compressed fitting density", async () => {
   assert.equal(resumePage.classList.contains("density-normal"), true);
   assert.equal(resumePage.classList.contains("density-tight"), false);
   assert.equal(resumePage.classList.contains("density-ultra"), false);
+  assert.equal(statusLine.textContent, "A4 preview · fits one page · normal");
+});
+
+test("fit button keeps content above the bottom page padding", async () => {
+  const heightsByDensity = { normal: 100, tight: 84, ultra: 74 };
+  const harness = createHarness({ heightsByDensity });
+  const resumePage = harness.elements["#resumePage"];
+  const statusLine = harness.elements["#statusLine"];
+  const fitButton = harness.elements["#fitButton"];
+  const flowContent = new TestElement();
+
+  resumePage.computedStyle = { paddingBottom: "10px" };
+  resumePage.getBoundingClientRect = () => createRect({ top: 0, bottom: 100 });
+  flowContent.getBoundingClientRect = () => {
+    const bottom = heightForDensity(resumePage, heightsByDensity);
+
+    return createRect({ top: 0, bottom });
+  };
+  resumePage.children = [flowContent];
+
+  await loadApp();
+
+  assert.equal(statusLine.textContent, "A4 preview · over by 12% · normal");
+
+  fitButton.dispatch("click");
+  await drainAnimationFrames(40);
+
+  const fitScale = Number(resumePage.style.getPropertyValue("--fit-scale"));
+
+  assert.equal(resumePage.classList.contains("density-normal"), true);
+  assert.equal(fitScale <= 0.9, true);
+  assert.equal(flowContent.getBoundingClientRect().bottom <= 90, true);
   assert.equal(statusLine.textContent, "A4 preview · fits one page · normal");
 });
 
